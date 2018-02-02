@@ -8,8 +8,8 @@ const router = new Router({ prefix: '/auth' });
 router.post('/login', async (ctx) => {
     const { login, password } = ctx.request.body;
 
-    if (!login || login === '') { ctx.body = 'login'; ctx.throw(400, 'Обязательное поле', { field: 'login' }); }
-    if (!password || password === '') ctx.throw(400, 'Обязательное поле', { field: 'password' });
+    if (!login || login === '') ctx.throw(400, JSON.stringify({ message: 'Обязательное поле', field: 'login' }));
+    if (!password || password === '') ctx.throw(400, JSON.stringify({ message: 'Обязательное поле', field: 'password' }));
 
     const user = await models.Users.findOne({ where: { login } });
 
