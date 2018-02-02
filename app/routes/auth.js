@@ -13,9 +13,9 @@ router.post('/login', async (ctx) => {
 
     const user = await models.Users.findOne({ where: { login } });
 
-    if (!user) ctx.throw(404, 'Неверный логин', { field: 'login' });
+    if (!user) ctx.throw(404, JSON.stringify({ message: 'Неверный логин', field: 'login' }));
 
-    if (!bcrypt.compareSync(password, user.password)) ctx.throw(400, 'Неверный пароль', { field: 'password' });
+    if (!bcrypt.compareSync(password, user.password)) ctx.throw(400, JSON.stringify({ message: 'Неверный пароль', field: 'password' }));
 
     ctx.body = await getToken(login);
 });
