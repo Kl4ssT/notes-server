@@ -17,7 +17,11 @@ export default (sequelize, DataTypes) => {
         },
         favourites: {
             type: DataTypes.BOOLEAN,
-            default: false
+            defaultValue: false
+        },
+        uuid: {
+            type: DataTypes.STRING,
+            unique: true
         }
     }, {
         underscored: true,
