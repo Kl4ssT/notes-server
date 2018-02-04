@@ -15,13 +15,18 @@ export default (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        text: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         favourites: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
         uuid: {
             type: DataTypes.STRING,
-            unique: true
+            unique: true,
+            allowNull: false
         }
     }, {
         underscored: true,
