@@ -33,6 +33,11 @@ export default (sequelize, DataTypes) => {
             foreignKey: 'id_user',
             as: 'Notes'
         });
+
+        Users.hasOne(models.Notes, {
+            foreignKey: 'id_user',
+            as: 'Note'
+        });
     };
 
     return Users;
