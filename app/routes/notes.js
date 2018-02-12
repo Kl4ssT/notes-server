@@ -23,9 +23,8 @@ router.post('/', authMiddleware, async (ctx) => {
 
     if (!title) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'title' }));
     if (!text) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'text' }));
-    if (!favourites) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'favourites' }));
 
-    const newNote = await ctx.state.user.createNote({ title, text, favourites, uuid: uuid() });
+    const newNote = await ctx.state.user.createNote({ title, text, favourites: favourites || false, uuid: uuid() });
 
     if (!newNote) ctx.throw(500, JSON.stringify({ message: 'Ошибка добавления', field: null }));
 
