@@ -1,6 +1,7 @@
 import Router from 'koa-router';
 import authMiddleware from "../middlewares/auth";
 import uuid from 'uuid/v1';
+import models from '../db';
 
 const router = new Router({ prefix: '/notes' });
 
@@ -43,10 +44,13 @@ router.put('/:id', authMiddleware, async (ctx) => {
     if (!title) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'title' }));
     if (!text) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'text' }));
 
-    const updatedNote = await ctx.state.user.updateNote(
+    const updatedNote = await models.notes.update(
         { title, text, favourites: favourites || false },
         { where:
-                { id: Number(id) }
+                {
+                    id: Number(id),
+                    user_id: ctx.state.user.id
+                }
         });
 
     if (!updatedNote) ctx.throw(500, JSON.stringify({ message: 'Ошибка изменения', field: null }));
