@@ -44,18 +44,15 @@ router.put('/:id', authMiddleware, async (ctx) => {
     if (!title) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'title' }));
     if (!text) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'text' }));
 
-    const updatedNote = await models.notes.update(
-        { title, text, favourites: favourites || false },
-        { where:
-                {
-                    id: Number(id),
-                    user_id: ctx.state.user.id
-                }
-        });
-
-    if (!updatedNote) ctx.throw(500, JSON.stringify({ message: 'Ошибка изменения', field: null }));
-
-    ctx.status = 200;
+    const updatedNote = await ctx.state.user.getNote({ where: { id } });
+    if (await updatedNote.update({ title, text, favourites: favourites || false }))
+    {
+        ctx.status = 200;
+    }
+    else
+    {
+        ctx.throw(500, JSON.stringify({ message: 'Ошибка изменения', field: null }))
+    }
 });
 
 router.del('/:id', authMiddleware, async (ctx) => {
