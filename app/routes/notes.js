@@ -13,7 +13,7 @@ router.get('/:id', authMiddleware, async (ctx) => {
 
    if (!id) ctx.throw(401, 'Ошибка запроса');
 
-    const note = await ctx.state.user.getNote({ where: { id } });
+    const note = await ctx.state.user.getNote({ where: { id: Number(id) } });
 
     if (!note) ctx.throw(404, { message: 'Заметка не найдена' });
 });
