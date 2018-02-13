@@ -33,4 +33,20 @@ router.post('/', authMiddleware, async (ctx) => {
     ctx.body = newNote;
 });
 
+router.del('/:id', authMiddleware, async (ctx) => {
+    const { id } = ctx.params;
+
+    if (!id) ctx.throw(400, 'Ошибка запроса');
+
+    if(await ctx.state.user.destroyNote({ where: { id: Number(id) } }))
+    {
+        ctx.status = 200;
+    }
+    else
+    {
+        ctx.throw(400, 'Ошибка удаления');
+    }
+
+});
+
 export default router;
