@@ -33,6 +33,27 @@ router.post('/', authMiddleware, async (ctx) => {
     ctx.body = newNote;
 });
 
+router.put('/:id', authMiddleware, async (ctx) => {
+    const { id } = this.params.id;
+
+    if (!id) ctx.throw(401, 'Ошибка запроса');
+
+    const { title, text, favourites } = ctx.request.body;
+
+    if (!title) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'title' }));
+    if (!text) ctx.throw(401, JSON.stringify({ message: 'Обязательное поле', field: 'text' }));
+
+    const updatedNote = await ctx.state.user.updateNote(
+        { title, text, favourites: favourites || false },
+        { where:
+                { id: Number(id) }
+        });
+
+    if (!updatedNote) ctx.throw(500, JSON.stringify({ message: 'Ошибка изменения', field: null }));
+
+    ctx.status = 200;
+});
+
 router.del('/:id', authMiddleware, async (ctx) => {
     const { id } = ctx.params;
 
