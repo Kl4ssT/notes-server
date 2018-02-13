@@ -51,7 +51,7 @@ router.put('/:id', authMiddleware, async (ctx) => {
     }
     else
     {
-        ctx.throw(500, JSON.stringify({ message: 'Ошибка изменения', field: null }))
+        ctx.throw(400, JSON.stringify({ message: 'Ошибка изменения', field: null }))
     }
 });
 
@@ -60,7 +60,9 @@ router.del('/:id', authMiddleware, async (ctx) => {
 
     if (!id) ctx.throw(400, 'Ошибка запроса');
 
-    if(await ctx.state.user.destroyNote({ where: { id: Number(id) } }))
+    const deletedNote = await ctx.state.user.getNote({ where: { id } });
+
+    if(await deletedNote.destroy())
     {
         ctx.status = 200;
     }
