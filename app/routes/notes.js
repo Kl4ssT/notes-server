@@ -34,7 +34,7 @@ router.post('/', authMiddleware, async (ctx) => {
 });
 
 router.put('/:id', authMiddleware, async (ctx) => {
-    const { id } = ctx.params.id;
+    const { id } = ctx.params;
 
     if (!id) ctx.throw(401, 'Ошибка запроса');
 
